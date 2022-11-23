@@ -1,5 +1,7 @@
 # nextJs-study
 
+## 초기 설정
+
 ```
 // client setting (현재 경로에 next + typescript 설치)
 
@@ -15,4 +17,15 @@ yarn add typescript ts-node @types/node @types/express @types/morgan --save-dev
 
 npx tsc --init (tsconfig.json 설정)
 
+yarn add pg typeorm reflect-metadata --save
+
+npx typeorm init
+
+```
+
+## 도커 설정
+```
+touch docker-compose.yml .env
+
+docker-compose up (도커 실행 명령어)
 ```
