@@ -4,6 +4,7 @@ import InputGroup from "../components/InputGroup";
 import Link from "next/link";
 import axios from "axios";
 import {useRouter} from "next/router";
+import {useAuthDispatch} from "../context/auth";
 
 type ErrorsTypes = {
   username?: string;
@@ -15,6 +16,8 @@ const Login: NextPage = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState<ErrorsTypes>({});
+
+  const dispatch = useAuthDispatch()
 
   let router = useRouter()
 
@@ -28,6 +31,7 @@ const Login: NextPage = () => {
         withCredentials:true
       })
       console.log("res => ",res);
+      dispatch("LOGIN", res.data?.user);
       await router.push('/')
     }catch(error:any){
       console.error(error)
@@ -59,9 +63,9 @@ const Login: NextPage = () => {
               </button>
             </form>
             <small>
-              이미 아이디가 있나요?
-              <Link href={{ pathname: "/login" }} legacyBehavior>
-                <a className="ml-1 text-blue-500 uppercase">로그인</a>
+              아직 아이디가 없나요?
+              <Link href={{ pathname: "/register" }} legacyBehavior>
+                <a className="ml-1 text-blue-500 uppercase">회원가입</a>
               </Link>
             </small>
           </div>
