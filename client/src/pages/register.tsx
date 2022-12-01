@@ -1,7 +1,9 @@
 import Link from "next/link";
-import React, { useState, memo } from "react";
+import React, {useState, memo, FormEvent} from "react";
 import { NextPage } from "next";
 import InputGroup from "../components/InputGroup";
+import {useRouter} from "next/router";
+import axios from 'axios'
 
 type ErrorsTypes = {
   email?: string;
@@ -15,12 +17,30 @@ const Register: NextPage = () => {
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState<ErrorsTypes>({});
 
+  let router = useRouter()
+
+  const handleSubmit = async (event:FormEvent)=>{
+    event.preventDefault()
+    try{
+      const res = await axios.post('/auth/register',{
+        email,
+        password,
+        username
+      })
+      console.log("res => ",res);
+      // await router.push('/login')
+    }catch(error:any){
+      console.error(error)
+      setErrors(error?.response?.data || {})
+    }
+  }
+
   return (
     <div className="bg-white">
       <div className="flex flex-col items-center justify-center h-screen p-6">
         <div className="w-10/12 mx-auto md:w-96">
           <h1 className="mb-2 text-lg font-medium">회원가입</h1>
-          <form>
+          <form onSubmit={handleSubmit}>
             <InputGroup
               placeholder={"Email"}
               value={email}
