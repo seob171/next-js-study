@@ -24,9 +24,11 @@ const Login: NextPage = () => {
       const res = await axios.post('/auth/login',{
         password,
         username
+      },{
+        withCredentials:true
       })
       console.log("res => ",res);
-      // await router.push('/login')
+      await router.push('/')
     }catch(error:any){
       console.error(error)
       setErrors(error?.response?.data || {})
