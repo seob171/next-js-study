@@ -1,9 +1,10 @@
 import Link from "next/link";
-import React, {useState, memo, FormEvent} from "react";
+import React, { useState, memo, FormEvent, useEffect } from "react";
 import { NextPage } from "next";
 import InputGroup from "../components/InputGroup";
-import {useRouter} from "next/router";
-import axios from 'axios'
+import { useRouter } from "next/router";
+import axios from "axios";
+import { useAuthState } from "../context/auth";
 
 type ErrorsTypes = {
   email?: string;
@@ -16,24 +17,29 @@ const Register: NextPage = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState<ErrorsTypes>({});
+  const { authenticated } = useAuthState();
 
-  let router = useRouter()
+  let router = useRouter();
 
-  const handleSubmit = async (event:FormEvent)=>{
-    event.preventDefault()
-    try{
-      const res = await axios.post('/auth/register',{
+  const handleSubmit = async (event: FormEvent) => {
+    event.preventDefault();
+    try {
+      const res = await axios.post("/auth/register", {
         email,
         password,
-        username
-      })
-      console.log("res => ",res);
-      await router.push('/login')
-    }catch(error:any){
-      console.error(error)
-      setErrors(error?.response?.data || {})
+        username,
+      });
+      console.log("res => ", res);
+      await router.push("/login");
+    } catch (error: any) {
+      console.error(error);
+      setErrors(error?.response?.data || {});
     }
-  }
+  };
+
+  useEffect(() => {
+    if (authenticated) router.push("/");
+  }, [authenticated]);
 
   return (
     <div className="bg-white">
